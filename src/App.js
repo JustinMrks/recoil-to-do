@@ -7,56 +7,35 @@ import {
   useRecoilValue,
 } from 'recoil';
 
-const textState = atom({
-  key: 'textState',
-  default: '',
+const todoListState = atom({
+  key: 'todoList',
+  default: [],
 });
 
-const charCountState = selector({
-  key: 'charCountState',
-  get: ({ get }) => {
-    const text = get(textState);
+const TodoList = () => {
+  const todoList = useRecoilValue(todoListState);
+  return (
+    <>
+      {/* <TodoListStats /> */}
+      {/* <TodoListFilters /> */}
+      <TodoItemCreator />
+      {todoList.map((item) => (
+        <TodoItem key={item.id} item={item} />
+      ))}
+    </>
+  );
+};
 
-    return text.length;
-  },
-});
+const TodoItemCreator = () => {};
+
+const TodoItem = () => {};
 
 function App() {
   return (
     <RecoilRoot>
-      <CharacterCounter />
+      <TodoList />
     </RecoilRoot>
   );
 }
 
 export default App;
-
-const CharacterCounter = () => {
-  return (
-    <div>
-      <TextInput />
-      <CharacterCount />
-    </div>
-  );
-};
-
-const TextInput = () => {
-  const [text, setText] = useRecoilState(textState);
-
-  const onChange = (event) => {
-    setText(event.target.value);
-  };
-
-  return (
-    <div>
-      <input type="text" value={text} onChange={onChange} />
-      <br />
-      Echo:{text}
-    </div>
-  );
-};
-
-const CharacterCount = () => {
-  const count = useRecoilValue(charCountState);
-  return <>Character Count: {count}</>;
-};
